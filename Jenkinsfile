@@ -8,6 +8,7 @@ pipeline {
     environment {
         DOCKER_HOST = 'tcp://192.168.1.14:2375'
         IMAGE_NAME = "venkatesansg111/abctechnologies"
+        CONTAINER_NAME = 'abctechnologies-container'
         GIT_REPO = 'https://github.com/venkatesansg111/ABC_Project.git'
         BRANCH = 'main'
     }
@@ -43,6 +44,28 @@ pipeline {
                 sh 'docker version'
                 sh 'cp target/ABCtechnologies-1.0.war .'  
                 sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."  
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withDockerRegistry([credentialsId: 'docker-registry-credentials', url: '']) {
+                    sh """
+                        docker tag ${IMAGE_NAME}:${env.BUILD_NUMBER} ${IMAGE_NAME}:latest
+                        docker push ${IMAGE_NAME}:${env.BUILD_NUMBER}
+                        docker push ${IMAGE_NAME}:latest
+                    """
+                }
+            }
+        }
+        stage('Deploy Docker Container') {
+            steps {
+                sh """
+                    echo "Cleaning up any existing container..."
+                    docker rm -f \$(docker ps -aq -f "name=${CONTAINER_NAME}") 2>/dev/null || true
+
+                    echo "Starting new container..."
+                    docker run -itd -P --name '${CONTAINER_NAME}-${env.BUILD_NUMBER}' ${IMAGE_NAME}:latest
+                """
             }
         }
         stage('Archive WAR') {
