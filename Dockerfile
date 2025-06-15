@@ -8,7 +8,7 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 COPY target/ABCtechnologies-1.0.war /usr/local/tomcat/webapps/ABCtechnologies.war
 
 # Expose default port
-EXPOSE 8080
+EXPOSE 8081
 
 # Start Tomcat
 CMD ["catalina.sh", "run"]
