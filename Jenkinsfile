@@ -1,11 +1,12 @@
 pipeline {
     agent any
-    
+
     tools {
         maven 'Maven3'       // Maven configured in Global Tool Configuration
     }
 
     environment {
+        DOCKER_HOST = 'tcp://192.168.1.14:2375'
         IMAGE_NAME = "venkatesansg111/abctechnologies"
         GIT_REPO = 'https://github.com/venkatesansg111/ABC_Project.git'
         BRANCH = 'main'
@@ -39,7 +40,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-		sh 'export DOCKER_HOST=tcp://192.168.1.14:2375'
+                sh docker version
                 sh 'cp target/ABCtechnologies-1.0.war .'  
                 sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."  
             }
