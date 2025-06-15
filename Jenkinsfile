@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh docker version
+                sh 'docker version'
                 sh 'cp target/ABCtechnologies-1.0.war .'  
                 sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."  
             }
