@@ -64,7 +64,7 @@ pipeline {
                     docker rm -f \$(docker ps -aq -f "name=${CONTAINER_NAME}") 2>/dev/null || true
 
                     echo "Starting new container..."
-                    docker run -itd -P --name '${CONTAINER_NAME}-${env.BUILD_NUMBER}' ${IMAGE_NAME}:latest
+                    docker run -itd -p 8081:8080 --name "${CONTAINER_NAME}-${BUILD_NUMBER}" ${IMAGE_NAME}:latest
                 """
             }
         }
