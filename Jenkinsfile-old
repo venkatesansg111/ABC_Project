@@ -1,26 +1,14 @@
 pipeline {
     agent any
 
-    environment {
-        
-    }
-
-    
-}
-
-pipeline {
-    agent any
-
     tools {
         maven 'Maven3'       // Maven configured in Global Tool Configuration
     }
 
     environment {
         DOCKER_HOST = 'tcp://192.168.1.14:2375'
-        KUBECONFIG = '/var/lib/jenkins/.kube/config'
         IMAGE_NAME = "venkatesansg111/abctechnologies"
         CONTAINER_NAME = 'abctechnologies-container'
-        SERVICE_NAME = 'abctechnologies-service'
         GIT_REPO = 'https://github.com/venkatesansg111/ABC_Project.git'
         BRANCH = 'main'
     }
@@ -69,13 +57,15 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Docker Image to Kubernetes') {
+        stage('Deploy Docker Container') {
             steps {
                 sh """
-                        kubectl apply -f k8s/deployment.yaml
-                        kubectl apply -f k8s/service.yaml
-                        kubectl get svc ${SERVICE_NAME}
-                    """
+                    echo "Cleaning up any existing container..."
+                    docker rm -f \$(docker ps -aq -f "name=${CONTAINER_NAME}") 2>/dev/null || true
+
+                    echo "Starting new container..."
+                    docker run -itd -p 8081:8080 --name "${CONTAINER_NAME}-${BUILD_NUMBER}" ${IMAGE_NAME}:latest
+                """
             }
         }
         stage('Archive WAR') {
