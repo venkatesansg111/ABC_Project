@@ -59,10 +59,12 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Docker Image to Kubernetes with Ansible') {
+        stage('Deploy Docker Image to Kubernetes') {
             steps {
                 sh """
-                        ansible-playbook -i ansible/inventory ansible/deploy_k8s.yml
+                        kubectl apply -f k8s/deployment.yaml
+                        kubectl apply -f k8s/service.yaml
+                        kubectl get svc ${SERVICE_NAME}
                     """
             }
         }
