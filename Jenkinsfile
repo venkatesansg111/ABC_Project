@@ -1,16 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        
-    }
-
-    
-}
-
-pipeline {
-    agent any
-
     tools {
         maven 'Maven3'       // Maven configured in Global Tool Configuration
     }
