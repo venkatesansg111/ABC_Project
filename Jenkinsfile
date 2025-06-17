@@ -64,8 +64,9 @@ pipeline {
                 sh """
                         pwd
                         ls -lrt
-                        ansible-playbook -i ansible/inventory.ini ansible/ping_test.yml
-                        ansible-playbook -i ansible/inventory.ini ansible/deploy_k8s.yml
+                        ansible-playbook -i ./inventory.ini ./ping_test.yml --list-hosts
+                        ansible-playbook -i ./inventory.ini ./ping_test.yml
+                        ansible-playbook -i ./inventory.ini ./deploy_k8s.yml
                     """
             }
         }
