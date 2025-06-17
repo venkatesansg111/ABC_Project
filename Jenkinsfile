@@ -62,8 +62,8 @@ pipeline {
         stage('Deploy Docker Image to Kubernetes with Ansible') {
             steps {
                 sh """
-                        ansible-playbook -i ansible/inventory.ini ansible/ping_test.yml -u jenkins-master --private-key /home/jenkins-master/.ssh/authorized_keys
-                        ansible-playbook -i ansible/inventory.ini ansible/deploy_k8s.yml -u jenkins-master --private-key /home/jenkins-master/.ssh/authorized_keys
+                        ansible-playbook -i ansible/inventory.ini ansible/ping_test.yml -u jenkins-master
+                        ansible-playbook -i ansible/inventory.ini ansible/deploy_k8s.yml -u jenkins-master
                     """
             }
         }
