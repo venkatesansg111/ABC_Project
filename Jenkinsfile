@@ -62,7 +62,8 @@ pipeline {
         stage('Deploy Docker Image to Kubernetes with Ansible') {
             steps {
                 sh """
-                        ansible-playbook -i ansible/inventory ansible/deploy_k8s.yml
+                        ansible-playbook -i ./inventory.ini ansible/ping_test.yml
+                        ansible-playbook -i ./inventory.ini ansible/deploy_k8s.yml
                     """
             }
         }
