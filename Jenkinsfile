@@ -65,8 +65,8 @@ pipeline {
                         whoami
                         env
                         ansible --version
-                        ansible-playbook -i ansible/inventory.ini ansible/ping_test.yml -u jenkins-master
-                        ansible-playbook -i ansible/inventory.ini ansible/deploy_k8s.yml -u jenkins-master
+                        ansible-playbook -i ansible/inventory.ini ansible/ping_test.yml
+                        ansible-playbook -i ansible/inventory.ini ansible/deploy_k8s.yml
                     """
             }
         }
